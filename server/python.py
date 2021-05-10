@@ -1,12 +1,16 @@
 import MySQLdb
 import random
+from codicefiscale import codicefiscale
 
 
-
-def insert(conn, query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19):
+def insert(query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19):
+    conn =  MySQLdb.connect('remotemysql.com','jAFoXk1z8p','DOZwJcdGpZ','jAFoXk1z8p')
     cursor = conn.cursor()
     cursor.execute(query,(i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19)) 
     conn.commit()
+    conn.close()
+
+
 
 #def selectAll(conn, query):
  #   cursor = conn.cursor()
@@ -17,7 +21,7 @@ def insert(conn, query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i
 
 def main():
    
-    conn =  MySQLdb.connect('remotemysql.com','jAFoXk1z8p','DOZwJcdGpZ','jAFoXk1z8p')
+    
     print('succefull connection')
     check = True
     while(check == True):
@@ -36,12 +40,12 @@ def main():
             i=0
             p=0
             while i==0:
-                email= input("inserisci email ")
-                emailControllo= input("Conferma email ")
+                email= input("inserisci email: ")
+                emailControllo= input("Conferma email: ")
                 while p==0 :
                     if (email==emailControllo):
-                        pw=input("inserisci password")
-                        pwControllo=input("Conferma password")
+                        pw=input("inserisci password: ")
+                        pwControllo=input("Conferma password: ")
                         if(pw==pwControllo):
                             print("Credenziali corrette")
                             i=1
@@ -58,10 +62,10 @@ def main():
                         i=0
                         p=1
 
-            t=input("Vuoi essere cliente (C) o lavoratore (L)?")
+            t=input("Vuoi essere cliente (C) o lavoratore (L)? ")
             cf = input('inserisci Codice fiscale: ')
             nome = input('inserisci nome: ')
-            cognome = input('inserisci cognome ')
+            cognome = input('inserisci cognome: ')
             eta = input('inserisci età: ')
             dataNascita = input('inserisci data nascita [aaaammgg]: ')
             luogoNascita = input('inserisci luogo di nascita: ')
@@ -71,12 +75,22 @@ def main():
             tel = input('inserisci numero telefonico: ')
             nazionalita = input('inserisci nazionalità: ')
             tipo=t
+            c=0
+            contolloCF=''
+        
             
-          
-
+            while c==0:
+                contolloCF=codicefiscale.encode(surname=cognome, name=nome, sex=sesso, birthdate=dataNascita, birthplace=luogoNascita)
+                if(cf==contolloCF):
+                    c=1
+                else:
+                    print("il codice fiscale inserito è ERRATO")
+                    cf=input("inserisci Codice fiscale:")
+                    c=0
+            print("I dati inseriti sono CORRETTI")
             if(t=="C"):
                 q = "insert into utente values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                insert(conn, q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,tipo,email,pw,'null','null','null','null','null') 
+                insert(q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,tipo,email,pw,'null','null','null','null','null') 
                 
             elif(t=="L"):  
                 
@@ -87,8 +101,8 @@ def main():
                 tipoCap = input('inserisci tipo capelli: ')
                 
                 q = "insert into utente values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                insert(conn, q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,tipo,email,pw,colCap,colOcc,altezza,peso,tipoCap)      
-            #selectAll(conn, q)
+                insert(q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,tipo,email,pw,colCap,colOcc,altezza,peso,tipoCap)      
+            #selectAll(conn, q)'''
        
             
 main()
