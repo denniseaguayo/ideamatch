@@ -2,9 +2,16 @@ import MySQLdb
 import random
 from codicefiscale import codicefiscale
 
+'''
+npm i 
+npm i cors
+pip install python-codicefiscale
+pip install MySQL
+
+'''
 
 def insert(query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19):
-    conn =  MySQLdb.connect('remotemysql.com','jAFoXk1z8p','DOZwJcdGpZ','jAFoXk1z8p')
+    conn =  MySQLdb.connect('remotemysql.com','iF0nI0tX1B','DbGYu5wcRW','iF0nI0tX1B')
     cursor = conn.cursor()
     cursor.execute(query,(i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19)) 
     conn.commit()
@@ -12,11 +19,20 @@ def insert(query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18
 
 
 
-#def selectAll(conn, query):
- #   cursor = conn.cursor()
-  #  cursor.execute(query)
-   # rows = cursor.fetchall()
-    #return rows
+def selectAll(conn,query):
+    
+    cursor = conn.cursor()
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    return rows
+
+def selectWhere(query, codice):
+    conn =  MySQLdb.connect('remotemysql.com','iF0nI0tX1B','DbGYu5wcRW','iF0nI0tX1B')
+    cursor = conn.cursor()
+    cursor.execute(query,(codice))
+    row = cursor.fetchone()
+    return row 
+    conn.close()
 
 
 def main():
@@ -28,6 +44,7 @@ def main():
         print('0-exit')
         print('1-Registrazione')
         print('2-login')
+        print('3-richiesta')
          
         sel = int(input('inserie opzione: '))
         
@@ -103,6 +120,32 @@ def main():
                 q = "insert into utente values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                 insert(q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,tipo,email,pw,colCap,colOcc,altezza,peso,tipoCap)      
             #selectAll(conn, q)'''
-       
+
+            '''select cfLavoratore
+                from richiesta,utente
+                where  colOcchi=colOcc and colCapelli=colCap and tipoCapelli=tipoCap and pesoRichiesta=peso and altezzaRichiesta=altezza
+                
+select tipo from utente where cf=cf and tipo='cliente' ;
+
+            '''
+        if sel == 3 :
+            
+            codice=input("inserisci codice fiscale: ")
+            cfCliente="select %s from utente where tipo='C' "
+            #print(selectAll(conn,cfCliente))
+            selectWhere(cfCliente, codice)
+            '''if codice==cfCliente:
+                print('inserisci le caratteristiche che vuoi che abbia la persona che cerchi')
+                colOcchi=input("inserisci colore occhi: ")
+                colCapelli=input("inserisci colore capelli: ")
+                tipoCapelli=input("inserisci il tipo di capelli: ")
+                pesoRichiesta=input("inserisci peso: ")
+                altezzaRichiesta=input("inserisci altezza: ")
+
+                q = "select cfLavoratore from richiesta,utente where colOcchi=colOcc and colCapelli=colCap and tipoCapelli=tipoCap and pesoRichiesta=peso and altezzaRichiesta=altezza"
+                selectAll(conn,q)
+            else:
+                print("MI SPIACE MA SEI UN LAVORATORE E NON PUOI FARE RICERCHE")'''
+
             
 main()
