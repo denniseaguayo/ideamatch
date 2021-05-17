@@ -19,6 +19,13 @@ def insert(query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18
     conn.commit()
     conn.close()
 
+def insert(query, i1,i2,i3,i4):
+    conn =  MySQLdb.connect('remotemysql.com','iF0nI0tX1B','DbGYu5wcRW','iF0nI0tX1B')
+    cursor = conn.cursor()
+    cursor.execute(query,(i1,i2,i3,i4)) 
+    conn.commit()
+    conn.close()
+
 
 
 def selectAll(query):
@@ -35,6 +42,7 @@ def selectWhere(query, codice):
     row = cursor.fetchone()
     return row 
     conn.close()
+
 
 
 def main():
@@ -121,34 +129,28 @@ def main():
                 
                 q = "insert into utente values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                 insert(q,cf,nome,cognome,eta,dataNascita,luogoNascita,indirizzo,sesso,cartaIdentita,tel,nazionalita,email,pw,tipo,colCap,colOcc,altezza,peso,tipoCap)      
-            #selectAll(conn, q)'''
+       
 
-            '''select cfLavoratore
-                from richiesta,utente
-                where  colOcchi=colOcc and colCapelli=colCap and tipoCapelli=tipoCap and pesoRichiesta=peso and altezzaRichiesta=altezza
-                
-select tipo from utente where cf=cf and tipo='cliente' ;
-
-            '''
         if sel == 3 :
     
             codice=input("inserisci codice fiscale: ")
             cfCliente=selectAll("select cf from utente where tipo='C'")
             print(cfCliente) 
           
-          
-            for codice in cfCliente:
-                print('inserisci le caratteristiche che vuoi che abbia la persona che cerchi')
-                colOcchi=input("inserisci colore occhi: ")
-                colCapelli=input("inserisci colore capelli: ")
-                tipoCapelli=input("inserisci il tipo di capelli: ")
-                pesoRichiesta=input("inserisci peso: ")
-                altezzaRichiesta=input("inserisci altezza: ")
-
-                q = "select cfLavoratore from richiesta,utente where colOcchi=colOcc and colCapelli=colCap and tipoCapelli=tipoCap and pesoRichiesta=peso and altezzaRichiesta=altezza"
-                selectAll(q)
+            i=0
+            try:
+                for codice in cfCliente:
+                    if i==0:
+                        print('inserisci le caratteristiche che vuoi che abbia la persona che cerchi')
+                        colOcchi=input("inserisci colore occhi: ")
+                        colCapelli=input("inserisci colore capelli: ")
+                        tipoCapelli=input("inserisci il tipo di capelli: ")
+                        pesoRichiesta=input("inserisci peso: ")
+                        altezzaRichiesta=input("inserisci altezza: ")
+                        print(selectAll("select cfLavoratore from richiesta,utente where colOcchi=colOcc or colCapelli=colCap or tipoCapelli=tipoCap or pesoRichiesta=peso or altezzaRichiesta=altezza"))
+                        i=1
             
-            else: 
+            except: 
                 print("MI SPIACE MA SEI UN LAVORATORE E NON PUOI FARE RICERCHE")
 
            
