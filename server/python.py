@@ -19,10 +19,10 @@ def insert(query, i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18
     conn.commit()
     conn.close()
 
-def insert(query, i1,i2,i3,i4):
+def insert3(query, i1,i2,i3,i4,i5,i6,i7,i8):
     conn =  MySQLdb.connect('remotemysql.com','iF0nI0tX1B','DbGYu5wcRW','iF0nI0tX1B')
     cursor = conn.cursor()
-    cursor.execute(query,(i1,i2,i3,i4)) 
+    cursor.execute(query,(i1,i2,i3,i4,i5,i6,i7,i8)) 
     conn.commit()
     conn.close()
 
@@ -133,26 +133,28 @@ def main():
 
         if sel == 3 :
     
-            codice=input("inserisci codice fiscale: ")
-            cfCliente=selectAll("select cf from utente where tipo='C'")
-            print(cfCliente) 
+            cfCliente=input("inserisci codice fiscale: ")
+            codice=selectAll("select cf from utente where tipo='C'")
+            print(codice) 
           
-            i=0
-            try:
-                for codice in cfCliente:
-                    if i==0:
-                        print('inserisci le caratteristiche che vuoi che abbia la persona che cerchi')
-                        colOcchi=input("inserisci colore occhi: ")
-                        colCapelli=input("inserisci colore capelli: ")
-                        tipoCapelli=input("inserisci il tipo di capelli: ")
-                        pesoRichiesta=input("inserisci peso: ")
-                        altezzaRichiesta=input("inserisci altezza: ")
-                        print(selectAll("select cfLavoratore from richiesta,utente where colOcchi=colOcc or colCapelli=colCap or tipoCapelli=tipoCap or pesoRichiesta=peso or altezzaRichiesta=altezza"))
-                        i=1
-            
-            except: 
-                print("MI SPIACE MA SEI UN LAVORATORE E NON PUOI FARE RICERCHE")
 
-           
+     
+            for i in codice:
+                for codiceR in range(len(codice)):
+                    print(codiceR)
+                    print('inserisci le caratteristiche che vuoi che abbia la persona che cerchi')
+                    colOcchi=input("inserisci colore occhi: ")
+                    colCapelli=input("inserisci colore capelli: ")
+                    tipoCapelli=input("inserisci il tipo di capelli: ")
+                    pesoRichiesta=input("inserisci peso: ")
+                    altezzaRichiesta=input("inserisci altezza: ")
+                    naz=input("inserisci nazionalita: ")
+                    insert3("insert into richiesta values(%d,%s,%s,%s,%s,%s,%s,%s)",codiceR,colOcchi,colCapelli,tipoCapelli,naz,pesoRichiesta,altezzaRichiesta,cfCliente) 
+                    #print(selectAll("select cfLavoratore from richiesta,utente where colOcchi=colOcc or colCapelli=colCap or tipoCapelli=tipoCap or pesoRichiesta=peso or altezzaRichiesta=altezza or naz=nazionalita"))
+                
+        
+                
+
             
+                
 main()
